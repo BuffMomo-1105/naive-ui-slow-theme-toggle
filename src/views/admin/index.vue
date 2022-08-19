@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>This is password reset</h1>
+        <h1>This is admin home Page</h1>
     </div>
 </template>
 
