@@ -4,6 +4,9 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useUserStore } from '@/stores/user'
+const store = useUserStore()
+</script>
 
 <style lang="scss" scoped></style>

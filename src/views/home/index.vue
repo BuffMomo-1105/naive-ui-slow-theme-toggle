@@ -1,15 +1,22 @@
 <template>
-  <n-space>
+  <n-space class="bg-black">
     <NDataTable :columns="columns" :data="data" />
+    <h1>{{ $t('welcome') }}==>This is i18n template demo</h1>
+    <n-icon size="40">
+      <game-controller-outline />
+    </n-icon>
   </n-space>
 
   <!-- <n-data-table :columns="columns" :data="data" :pagination="pagination" :bordered="false" /> -->
 </template>
 
 <script setup>
-import { h, defineComponent } from "vue";
-import { NDataTable, NIcon, NButton, useMessage } from "naive-ui";
-import { CashOutline } from "@vicons/ionicons5";
+import { h, defineComponent } from 'vue'
+import { NDataTable, NIcon, NButton, useMessage } from 'naive-ui'
+import { CashOutline } from '@vicons/ionicons5'
+import { GameControllerOutline, GameController } from '@vicons/ionicons5'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 // const createColumns = ({ play }) => {
 //   return [
@@ -59,48 +66,48 @@ import { CashOutline } from "@vicons/ionicons5";
 //     },
 //   ];
 // };
-const message = useMessage();
+const message = useMessage()
 const data = [
-  { no: 3, title: "Wonderwall", length: "4:18" },
-  { no: 4, title: "Don't Look Back in Anger", length: "4:48" },
-  { no: 12, title: "Champagne Supernova", length: "7:27" },
-  { no: 13, title: "Champagne Supernova", length: "7:27" },
-];
-console.log(data);
+  { no: 3, title: t('welcome'), length: '4:18' }, //i18n demo  within script
+  { no: 4, title: "Don't Look Back in Anger", length: '4:48' },
+  { no: 12, title: 'Champagne Supernova', length: '7:27' },
+  { no: 13, title: 'Champagne Supernova', length: '7:27' },
+]
+console.log(data)
 function play(row) {
-  message.info(`Play ${row.title}`);
+  message.info(`Play ${row.title}`)
 }
 
 const columns = [
   {
-    title: "No",
-    key: "no",
+    title: 'No',
+    key: 'no',
   },
   {
-    title: "Title",
-    key: "title",
+    title: 'Title',
+    key: 'title',
   },
   {
-    title: "Length",
-    key: "length",
+    title: 'Length',
+    key: 'length',
   },
   {
-    title: "Action",
-    key: "actions",
+    title: 'Action',
+    key: 'actions',
     render(row) {
       return h(
         NButton,
         {
           strong: true,
           tertiary: true,
-          size: "small",
+          size: 'small',
           onClick: () => play(row),
         },
-        { default: () => "Play" }
-      );
+        { default: () => 'Play' }
+      )
     },
   },
-];
+]
 
 // const actionColumns = [];
 // export default defineComponent({

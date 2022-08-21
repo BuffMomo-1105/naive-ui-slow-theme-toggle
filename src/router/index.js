@@ -10,6 +10,7 @@ import Register from '../views/auth/register.vue'
 import Password from '../views/user/password.vue'
 import Profile from '../views/user/profile.vue'
 import adminRouter from './modules/admin'
+import { useUserStore } from '@/stores/user'
 
 //FIXME
 const router = createRouter({
@@ -57,37 +58,25 @@ const router = createRouter({
     },
   ],
 })
-
-// FIXME : use pinia user getters
 // requiresAuth: user.role == 'user' || user.role == 'admin'
 
-// router.beforeEach((to, from, next) => {
-//   if (to.matched.some((record) => record.meta.requiresAuth)) {
-//     if (store.getters.isLoggedIn) {
-//       next();
-//       return;
-//     }
-//     next("/login");
-//   } else {
-//     next();
-//   }
-
-//   if (to.matched.some((record) => record.meta.requiresAdmin)) {
-
-//     if (store.getters.isAdmin) {
-//       next();
-//       return;
-//     }
-//     next("/login");
-//   }
-
-//   if (to.matched.some((record) => record.meta.requiresGuest)) {
-//     if (!store.getters.isGuest) {
-//       next();
-//       return;
-//     }
-//     next("/");
-//   }
-// });
+router.beforeEach((to, from, next) => {
+  const userStore = useUserStore()
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (userStore.roleGetter == 'user') {
+      next()
+      return
+    }
+    next('/auth/login')
+  } else if (to.matched.some((record) => record.meta.requiresAdmin)) {
+    if (userStore.roleGetter == 'admin') {
+      next()
+      return
+    }
+    next('/auth/login')
+  } else {
+    next()
+  }
+})
 
 export default router
