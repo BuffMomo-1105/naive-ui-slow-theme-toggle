@@ -1,17 +1,23 @@
-import { createApp } from "vue";
-import { createPinia } from "pinia";
+import { createApp, markRaw } from 'vue'
+import { createPinia } from 'pinia'
 
-import App from "./App.vue";
-import router from "./router";
-import i18n from "./boot/i18n";
-import "./assets/main.css";
-import "uno.css";
-import naive from "naive-ui";
+import App from './App.vue'
+import router from './router'
+import i18n from './boot/i18n'
+import './assets/main.css'
+import 'uno.css'
+import naive from 'naive-ui'
 
-const app = createApp(App);
+const app = createApp(App)
+const pinia = createPinia()
 
-app.use(createPinia());
-app.use(router);
-app.use(naive);
-app.use(i18n);
-app.mount("#app");
+pinia.use(({ store }) => {
+  store.$router = markRaw(router)
+})
+
+app.use(pinia)
+app.use(router)
+app.use(naive)
+app.use(i18n)
+app.mount('#app')
+
