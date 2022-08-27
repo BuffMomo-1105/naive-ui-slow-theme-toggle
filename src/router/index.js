@@ -5,8 +5,7 @@ import Menu from '../layouts/TheMenu.vue'
 import Footer from '../layouts/TheFooter.vue'
 import Home from '../views/home/index.vue'
 import About from '../views/about/index.vue'
-import Login from '../views/auth/login.vue'
-import Register from '../views/auth/register.vue'
+import Auth from '../views/auth/auth.vue'
 import Password from '../views/user/password.vue'
 import Profile from '../views/user/profile.vue'
 import adminRouter from './modules/admin'
@@ -35,12 +34,8 @@ const router = createRouter({
     },
 
     {
-      path: '/auth/login',
-      component: Login,
-    },
-    {
-      path: '/auth/register',
-      component: Register,
+      path: '/auth',
+      component: Auth,
     },
     {
       path: '/user/profile',

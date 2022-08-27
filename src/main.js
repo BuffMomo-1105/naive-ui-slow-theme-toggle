@@ -20,6 +20,13 @@ pinia.use(({ store }) => {
 })
 
 app.use(pinia)
+window.isMobileScreen = function (w) {
+  if (w < 1000) {
+    return true
+  } else {
+    return false
+  }
+}
 
 const userStore = useUserStore()
 const shopStore = useShopStore()
