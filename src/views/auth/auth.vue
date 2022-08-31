@@ -131,8 +131,6 @@
 import { darkTheme } from 'naive-ui'
 import { useRouter } from 'vue-router'
 import { onMounted, reactive, ref } from 'vue'
-import { useUserStore } from '@/stores/user'
-const userStore = useUserStore()
 
 const router = useRouter()
 
@@ -147,12 +145,8 @@ const registerForm = ref({
 })
 const loginFormRef = ref(null)
 
-async function login() {
-  await userStore.login(loginForm.value)
-}
-async function handleRegister() {
-  await userStore.register(registerForm.value)
-}
+async function login() {}
+async function handleRegister() {}
 </script>
 
 <style scoped>

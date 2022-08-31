@@ -1,254 +1,69 @@
 <template>
-  <n-space class="bg-black">
-    <NDataTable :columns="columns" :data="data" />
-    <h1>{{ $t('welcome') }}==>This is i18n template demo</h1>
-    <n-icon size="40">
-      <game-controller-outline />
-    </n-icon>
-  </n-space>
-
-  <!-- <n-data-table :columns="columns" :data="data" :pagination="pagination" :bordered="false" /> -->
+  <n-config-provider
+    :theme="inverted ? darkTheme : null"
+    :theme-overrides="inverted == true ? darkThemeOverrides : lightThemeOverrides"
+  >
+    <n-theme-editor>
+      <n-layout has-sider>
+        <n-icon size="50" class="absolute z-99999999 left-2 top-2 cursor-pointer" @click="collapsed = !collapsed">
+          <menu-icon />
+        </n-icon>
+        <TheMenu v-model:collapsed="collapsed">
+          <template v-slot:theme-switch>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              viewBox="0 0 24 24"
+              @click="changeTheme"
+              class="cursor-pointer"
+            >
+              <path
+                d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26a5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"
+                fill="currentColor"
+              ></path>
+            </svg>
+          </template>
+        </TheMenu>
+        <div class="block">
+          <div v-for="index in 25" :key="index" class="m-4">
+            <DataTable />
+          </div>
+        </div>
+      </n-layout>
+    </n-theme-editor>
+  </n-config-provider>
 </template>
 
 <script setup>
-import { h, defineComponent } from 'vue'
-import { NDataTable, NIcon, NButton, useMessage } from 'naive-ui'
-import { CashOutline } from '@vicons/ionicons5'
-import { GameControllerOutline, GameController } from '@vicons/ionicons5'
-import { useI18n } from 'vue-i18n'
-const { t } = useI18n()
+import { Menu as MenuIcon, Heart as PickIcon, Settings as SettingIcon } from '@vicons/ionicons5'
+import TheMenu from './Menu.vue'
+import DataTable from './DataTable.vue'
+import { darkTheme, NThemeEditor, NConfigProvider } from 'naive-ui'
+import { NIcon } from 'naive-ui'
+import { inject, ref, onMounted, computed } from 'vue'
 
-// const createColumns = ({ play }) => {
-//   return [
-//     {
-//       title: "No",
-//       key: "no",
-//     },
-//     {
-//       title: "Title",
-//       key: "title",
-//     },
-//     {
-//       title: "Length",
-//       key: "length",
-//     },
-//     {
-//       title: "Action",
-//       key: "actions",
-//       render(row) {
-//         return h(
-//           NButton,
-//           {
-//             strong: true,
-//             tertiary: true,
-//             size: "small",
-//             onClick: () => play(row),
-//           },
-//           { default: () => "Play" }
-//         );
-//       },
-//     },
-//     {
-//       title: "Action2",
-//       key: "xxx",
-//       render(row) {
-//         return h(
-//           NButton,
-//           {
-//             strong: true,
-//             tertiary: true,
-//             size: "small",
-//             onClick: () => play(row),
-//           },
-//           { default: () => "Play" }
-//         );
-//       },
-//     },
-//   ];
-// };
-const message = useMessage()
-const data = [
-  { no: 3, title: t('welcome'), length: '4:18' }, //i18n demo  within script
-  { no: 4, title: "Don't Look Back in Anger", length: '4:48' },
-  { no: 12, title: 'Champagne Supernova', length: '7:27' },
-  { no: 13, title: 'Champagne Supernova', length: '7:27' },
-]
-console.log(data)
-function play(row) {
-  message.info(`Play ${row.title}`)
+function changeTheme() {
+  console.log('change theme ', inverted)
+  inverted.value = !inverted.value
+  document.body.classList.toggle('dark-theme')
 }
 
-const columns = [
-  {
-    title: 'No',
-    key: 'no',
-  },
-  {
-    title: 'Title',
-    key: 'title',
-  },
-  {
-    title: 'Length',
-    key: 'length',
-  },
-  {
-    title: 'Action',
-    key: 'actions',
-    render(row) {
-      return h(
-        NButton,
-        {
-          strong: true,
-          tertiary: true,
-          size: 'small',
-          onClick: () => play(row),
-        },
-        { default: () => 'Play' }
-      )
-    },
-  },
-]
-
-// const actionColumns = [];
-// export default defineComponent({
-//   setup() {
-//     return {
-//       message,
-//       data,
-//       columns,
-//       // columns: createColumns({
-//       //   play(row) {
-//       //     message.info(`Play ${row.title}`);
-//       //   },
-//       // }),
-//       actionColumns,
-//       pagination: false,
-//     };
-//   },
-//   components: { BigTable },
-// });
+const collapsed = ref(true)
+const inverted = ref(true)
 </script>
 
-<!-- 
-<template>
-  <n-data-table :key="(row) => row.key" :columns="columns" :data="data" :pagination="pagination" />
-  <pre>{{ JSON.stringify(data, null, 2) }}</pre>
-</template>
+<style>
+.n-layout .n-layout-scroll-container {
+  overflow-x: hidden;
+  box-sizing: border-box;
+  height: 100vh;
+}
 
-<script>
-import { h, defineComponent, ref, nextTick } from "vue";
-import { NInput } from "naive-ui";
+.n-layout-sider-scroll-container {
+  overflow: hidden !important;
+}
 
-const createData = () => [
-  {
-    key: 0,
-    name: "John Brown",
-    age: "32",
-    address: "New York No. 1 Lake Park",
-  },
-  {
-    key: 1,
-    name: "Jim Green",
-    age: "42",
-    address: "London No. 1 Lake Park",
-  },
-  {
-    key: 2,
-    name: "Joe Black",
-    age: "32",
-    address: "Sidney No. 1 Lake Park",
-  },
-];
-
-const ShowOrEdit = defineComponent({
-  props: {
-    value: [String, Number],
-    onUpdateValue: [Function, Array],
-  },
-  setup(props) {
-    const isEdit = ref(false);
-    const inputRef = ref(null);
-    const inputValue = ref(props.value);
-    function handleOnClick() {
-      isEdit.value = true;
-      nextTick(() => {
-        inputRef.value.focus();
-      });
-    }
-    function handleChange() {
-      props.onUpdateValue(inputValue.value);
-      isEdit.value = false;
-    }
-    return () =>
-      h(
-        "div",
-        {
-          onClick: handleOnClick,
-        },
-        isEdit.value
-          ? h(NInput, {
-            ref: inputRef,
-            value: inputValue.value,
-            onUpdateValue: (v) => {
-              inputValue.value = v;
-            },
-            onChange: handleChange,
-            onBlur: handleChange,
-          })
-          : props.value
-      );
-  },
-});
-
-export default defineComponent({
-  setup() {
-    const data = ref(createData());
-    return {
-      data,
-      columns: [
-        {
-          title: "Name",
-          key: "name",
-          width: 150,
-          render(row, index) {
-            return h(ShowOrEdit, {
-              value: row.name,
-              onUpdateValue(v) {
-                data.value[index].name = v;
-              },
-            });
-          },
-        },
-        {
-          title: "Age",
-          key: "age",
-          width: 100,
-          render(row, index) {
-            return h(ShowOrEdit, {
-              value: row.age,
-              onUpdateValue(v) {
-                data.value[index].age = v;
-              },
-            });
-          },
-        },
-        {
-          title: "Address",
-          key: "address",
-          render(row, index) {
-            return h(ShowOrEdit, {
-              value: row.address,
-              onUpdateValue(v) {
-                data.value[index].address = v;
-              },
-            });
-          },
-        },
-      ],
-      pagination: {
-        pageSize: 10,
-      },
-    };
-  },
-});
-</script> -->
+.n-layout-sider .n-layout-toggle-button {
+  top: 5%;
+}
+</style>
